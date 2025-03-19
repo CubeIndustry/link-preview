@@ -131,23 +131,65 @@
     <iframe src="" class="displayStyle2" id="iframe"></iframe>
   </main>
   <footer>
-    <p>&copy; 2025 Link Preview. All rights reserved.</p>
+    <p>&copy; 2023 Link Preview. All rights reserved.</p>
   </footer>
   <script>
+    window.onload = () => {
+      let darkMode = localStorage.getItem('darkMode') === 'true';
+      applyDarkMode(darkMode);
+      document.getElementById('urlInput').focus();
+    };
+
+    function applyDarkMode(enabled) {
+      const icons = document.getElementsByClassName('icon');
+      const border = document.getElementsByClassName('border');
+      const body = document.body;
+      const urlInput = document.getElementById('urlInput');
+
+      if (enabled) {
+        body.style.backgroundColor = '#0E1525';
+        urlInput.style.backgroundColor = '#2B3245';
+        urlInput.style.color = '#C2C8CC';
+        Array.from(icons).forEach(icon => icon.style.color = '#C2C8CC');
+        Array.from(border).forEach(border => border.style.border = '1px solid #3C445C');
+        document.getElementById('mode-toggle').classList.remove('fa-moon');
+        document.getElementById('mode-toggle').classList.add('fa-sun');
+      } else {
+        body.style.backgroundColor = '#f0f0f0';
+        urlInput.style.backgroundColor = '#CFCFCF';
+        urlInput.style.color = '#7D7D7D';
+        Array.from(icons).forEach(icon => icon.style.color = '#7D7D7D');
+        Array.from(border).forEach(border => border.style.border = '1px solid #C2C8CC');
+        document.getElementById('mode-toggle').classList.remove('fa-sun');
+        document.getElementById('mode-toggle').classList.add('fa-moon');
+      }
+
+      localStorage.setItem('darkMode', enabled);
+    }
+
+    document.getElementById('mode-toggle').addEventListener('click', function () {
+      let darkMode = localStorage.getItem('darkMode') !== 'true';
+      applyDarkMode(darkMode);
+    });
+
     document.getElementById('aleft').addEventListener('click', function () {
       window.history.back();
     });
+
     document.getElementById('aright').addEventListener('click', function () {
       window.history.forward();
     });
+
     document.getElementById('refresh').addEventListener('click', function () {
       window.location.reload();
     });
+
     document.getElementById('desktop').addEventListener('click', function () {
       let site = document.getElementById('iframe');
       site.classList.toggle('displayStyle1');
       site.classList.toggle('displayStyle2');
     });
+
     document.getElementById('urlInput').addEventListener('keydown', function (event) {
       let site = document.getElementById('iframe');
       if (event.key === 'Enter') {
@@ -155,42 +197,11 @@
         site.src = url;
       }
     });
-    document.getElementById('info').addEventListener('click', function () {
+
+    document.getElementById('info').addEventListener('click', function () {
       alert('Some pages cannot be displayed due to iframe restrictions.');
     });
-    let darkMode = false;
-    document.getElementById('mode-toggle').addEventListener('click', function () {
-      const icons = document.getElementsByClassName('icon');
-      const border = document.getElementsByClassName('border');
-      const body = document.body;
-      const urlInput = document.getElementById('urlInput');
-      darkMode = !darkMode;
-      if (darkMode) {
-        body.style.backgroundColor = '#0E1525';
-        urlInput.style.backgroundColor = '#2B3245';
-        urlInput.style.color = '#C2C8CC';
-        Array.from(icons).forEach(function (icon) {
-          icon.style.color = '#C2C8CC';
-        });
-        Array.from(border).forEach(function (border) {
-          border.style.border = '1px solid #3C445C';
-          document.getElementById('mode-toggle').classList.remove('fa-moon');
-          document.getElementById('mode-toggle').classList.add('fa-sun');
-        });
-      } else {
-        body.style.backgroundColor = '#f0f0f0';
-        urlInput.style.backgroundColor = '#CFCFCF';
-        urlInput.style.color = '#7D7D7D';
-        Array.from(icons).forEach(function (icon) {
-          icon.style.color = '#7D7D7D';
-        });
-        Array.from(border).forEach(function (border) {
-          border.style.border = '1px solid #C2C8CC';
-        });
-        document.getElementById('mode-toggle').classList.remove('fa-sun');
-        document.getElementById('mode-toggle').classList.add('fa-moon');
-      }
-    });
+
     document.getElementById('open').addEventListener('click', function () {
       window.location.href = document.getElementById('urlInput').value;
     });
